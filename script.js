@@ -70,8 +70,19 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup dark mode toggle
   setupDarkModeToggle();
   
-  // Initialize voice control (NEW)
+  // Initialize voice control (ENHANCED)
   initializeVoiceControl();
+  
+  // Load voice preference
+  const savedVoiceEnabled = localStorage.getItem('voiceEnabled');
+  if (savedVoiceEnabled === 'true') {
+    // Delay to ensure proper initialization
+    setTimeout(() => {
+      if (voiceRecognition) {
+        toggleVoiceControl();
+      }
+    }, 1000);
+  }
 });
 
 // Save stopwatch state to localStorage
@@ -322,6 +333,12 @@ function lap() {
     
     if ($id("record-container"))
       $id("record-container").style.display = "block";
+    
+    // Show export button when first lap is recorded
+    if ($id("exportlap") && lapCounter === 1) {
+      $id("exportlap").style.display = "inline-block";
+    }
+    
     getdiff();
 
     var lap_time =
@@ -359,7 +376,114 @@ function lap() {
 function clearLap() {
   if ($id("record-container")) $id("record-container").style.display = "none";
   if ($id("record-table-body")) $id("record-table-body").innerHTML = "";
+  if ($id("exportlap")) $id("exportlap").style.display = "none";
   lapCounter = 1;
+}
+
+// ============================================
+// LAP EXPORT FUNCTIONALITY (NEW FEATURE)
+// ============================================
+
+// Export lap times to CSV
+function exportLaps() {
+  const tableBody = $id("record-table-body");
+  if (!tableBody || tableBody.children.length === 0) {
+    alert("No lap data to export!");
+    return;
+  }
+
+  const rows = Array.from(tableBody.children);
+  const lapData = [];
+  
+  // Add header
+  lapData.push(['Lap Number', 'Total Time', 'Lap Time', 'Export Date']);
+  
+  // Add lap data (reverse order since table shows newest first)
+  rows.reverse().forEach((row, index) => {
+    const cells = row.children;
+    if (cells.length >= 3) {
+      lapData.push([
+        cells[0].textContent, // Lap number
+        cells[1].textContent, // Total time
+        cells[2].textContent, // Lap difference
+        new Date().toLocaleString() // Export timestamp
+      ]);
+    }
+  });
+
+  // Create CSV content
+  const csvContent = lapData.map(row => 
+    row.map(cell => `"${cell}"`).join(',')
+  ).join('\n');
+
+  // Create and download file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `stopwatch-laps-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Show success message
+    showVoiceStatus('📁 **EXPORTED** Lap times to CSV', '#43c6ac');
+  } else {
+    // Fallback for older browsers
+    alert('Export not supported in this browser. Please use a modern browser.');
+  }
+}
+
+// Export lap times to JSON format
+function exportLapsJSON() {
+  const tableBody = $id("record-table-body");
+  if (!tableBody || tableBody.children.length === 0) {
+    alert("No lap data to export!");
+    return;
+  }
+
+  const rows = Array.from(tableBody.children);
+  const lapData = {
+    exportDate: new Date().toISOString(),
+    totalLaps: rows.length,
+    laps: []
+  };
+  
+  // Add lap data (reverse order since table shows newest first)
+  rows.reverse().forEach((row, index) => {
+    const cells = row.children;
+    if (cells.length >= 3) {
+      lapData.laps.push({
+        lapNumber: parseInt(cells[0].textContent),
+        totalTime: cells[1].textContent,
+        lapTime: cells[2].textContent,
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+
+  // Create JSON content
+  const jsonContent = JSON.stringify(lapData, null, 2);
+
+  // Create and download file
+  const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `stopwatch-laps-${new Date().toISOString().split('T')[0]}.json`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Show success message
+    showVoiceStatus('📁 **EXPORTED** Lap times to JSON', '#43c6ac');
+  }
 }
 
 // ============================================
@@ -535,12 +659,16 @@ function setPresetTimer(minutes) {
   }, 300);
 }
 // ============================================
-// VOICE COMMAND CONTROL (NEW FEATURE)
+// VOICE COMMAND CONTROL (ENHANCED FEATURE)
 // ============================================
+
+let voiceRecognition = null;
+let isVoiceEnabled = false;
 
 function initializeVoiceControl() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const voiceStatus = $id('voice-command-status');
+    const voiceToggleBtn = $id('voice-toggle');
 
     if (!SpeechRecognition) {
         if (voiceStatus) {
@@ -548,80 +676,199 @@ function initializeVoiceControl() {
             voiceStatus.innerHTML = '❌ Voice control not supported in this browser.';
             voiceStatus.style.color = '#ff0000';
         }
+        if (voiceToggleBtn) {
+            voiceToggleBtn.style.display = 'none';
+        }
         return;
     }
 
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
+    // Show voice toggle button
+    if (voiceToggleBtn) {
+        voiceToggleBtn.style.display = 'inline-block';
+        voiceToggleBtn.addEventListener('click', toggleVoiceControl);
+    }
 
-    recognition.onstart = function() {
+    voiceRecognition = new SpeechRecognition();
+    voiceRecognition.continuous = true;
+    voiceRecognition.interimResults = false;
+    voiceRecognition.lang = 'en-US';
+
+    voiceRecognition.onstart = function() {
         if (voiceStatus) {
             voiceStatus.style.display = 'block';
-            voiceStatus.innerHTML = '<i class="fas fa-microphone-alt"></i> **LISTENING:** Say "Start", "Stop", "Reset", or "Lap"';
+            voiceStatus.innerHTML = '<i class="fas fa-microphone-alt"></i> **LISTENING:** Say "Start", "Stop", "Reset", "Lap", "Export", or "Next Video"';
             voiceStatus.style.color = '#43c6ac';
         }
     };
 
-    recognition.onresult = function(event) {
+    voiceRecognition.onresult = function(event) {
         const last = event.results.length - 1;
         const rawCommand = event.results[last][0].transcript.trim();
         const command = rawCommand.toLowerCase();
         
         if (voiceStatus) {
-            voiceStatus.innerHTML = `<i class="fas fa-bullhorn"></i> **COMMAND HEARD:** "${rawCommand}"`;
+            voiceStatus.innerHTML = `<i class="fas fa-bullhorn"></i> **COMMAND:** "${rawCommand}"`;
             voiceStatus.style.color = '#ffd166';
         }
 
-        if (mode === 'stopwatch') {
-            if (command.includes('start') || command.includes('stop') || command.includes('pause')) {
+        // Enhanced command recognition with more variations
+        if (command.includes('start') || command.includes('go') || command.includes('begin')) {
+            if (!timer) {
                 start();
-                if (voiceStatus) {
-                    const action = timer ? 'Started' : 'Paused';
-                    const icon = timer ? '<i class="fas fa-running"></i>' : '<i class="fas fa-pause-circle"></i>';
-                    voiceStatus.innerHTML = `${icon} **ACTION:** Stopwatch ${action}.`;
-                    voiceStatus.style.color = '#00ff00';
-                }
-            } else if (command.includes('reset')) {
-                reset();
-                if (voiceStatus) {
-                    voiceStatus.innerHTML = '<i class="fas fa-undo"></i> **ACTION:** Stopwatch Reset.';
-                    voiceStatus.style.color = '#00ff00';
-                }
-            } else if (command.includes('lap')) {
-                lap();
-                if (voiceStatus) {
-                    voiceStatus.innerHTML = '<i class="fas fa-stopwatch"></i> **ACTION:** Lap Recorded.';
-                    voiceStatus.style.color = '#00ff00';
-                }
-            } else {
-                 // Reset status for unrecognized command
-                if (voiceStatus) {
-                    voiceStatus.innerHTML = '🤷 **DID NOT RECOGNIZE:** Please try "Start" or "Reset"';
-                    voiceStatus.style.color = '#ff6b35';
-                }
+                showVoiceStatus('▶️ **STARTED** Stopwatch', '#00ff00');
             }
+        } else if (command.includes('stop') || command.includes('pause') || command.includes('halt')) {
+            if (timer) {
+                start(); // This toggles to pause
+                showVoiceStatus('⏸️ **PAUSED** Stopwatch', '#ffd166');
+            }
+        } else if (command.includes('reset') || command.includes('clear all') || command.includes('restart')) {
+            reset();
+            showVoiceStatus('🔄 **RESET** Stopwatch', '#ff6b35');
+        } else if (command.includes('lap') || command.includes('split') || command.includes('record')) {
+            if (timer) {
+                lap();
+                showVoiceStatus('🏁 **LAP** Recorded', '#00ff00');
+            } else {
+                showVoiceStatus('⚠️ Start stopwatch first', '#ff6b35');
+            }
+        } else if (command.includes('clear lap') || command.includes('delete lap')) {
+            clearLap();
+            showVoiceStatus('🗑️ **CLEARED** All laps', '#ff6b35');
+        } else if (command.includes('export') || command.includes('download') || command.includes('save lap')) {
+            exportLaps();
+            showVoiceStatus('📁 **EXPORTING** Lap times', '#43c6ac');
+        } else if (command.includes('next video') || command.includes('change video') || command.includes('switch video')) {
+            if (window.videoManager) {
+                window.videoManager.nextVideo();
+                showVoiceStatus('🎬 **SWITCHED** to next video', '#667eea');
+            }
+        } else if (command.includes('previous video') || command.includes('last video')) {
+            if (window.videoManager) {
+                window.videoManager.previousVideo();
+                showVoiceStatus('🎬 **SWITCHED** to previous video', '#667eea');
+            }
+        } else if (command.includes('video one') || command.includes('first video')) {
+            if (window.videoManager) {
+                window.videoManager.setVideo(0);
+                showVoiceStatus('🎬 **SWITCHED** to video 1', '#667eea');
+            }
+        } else if (command.includes('video two') || command.includes('second video')) {
+            if (window.videoManager) {
+                window.videoManager.setVideo(1);
+                showVoiceStatus('🎬 **SWITCHED** to video 2', '#667eea');
+            }
+        } else if (command.includes('video three') || command.includes('third video')) {
+            if (window.videoManager) {
+                window.videoManager.setVideo(2);
+                showVoiceStatus('🎬 **SWITCHED** to video 3', '#667eea');
+            }
+        } else if (command.includes('video four') || command.includes('fourth video')) {
+            if (window.videoManager) {
+                window.videoManager.setVideo(3);
+                showVoiceStatus('🎬 **SWITCHED** to video 4', '#667eea');
+            }
+        } else if (command.includes('random video') || command.includes('shuffle video')) {
+            if (window.videoManager) {
+                window.videoManager.switchToRandomVideo();
+                showVoiceStatus('🎲 **RANDOM** video selected', '#667eea');
+            }
+        } else if (command.includes('dark mode') || command.includes('night mode')) {
+            toggleDarkMode();
+            showVoiceStatus('🌙 **TOGGLED** Dark mode', '#43c6ac');
+        } else if (command.includes('light mode') || command.includes('day mode')) {
+            toggleLightMode();
+            showVoiceStatus('☀️ **TOGGLED** Light mode', '#43c6ac');
+        } else {
+            showVoiceStatus('🤷 Try: "Start", "Stop", "Reset", "Lap", or "Clear"', '#ff6b35');
         }
     };
 
-    recognition.onerror = function(event) {
+    voiceRecognition.onerror = function(event) {
+        console.log('Voice recognition error:', event.error);
         if (voiceStatus) {
-            voiceStatus.innerHTML = `⚠️ **ERROR:** Restarting voice service.`;
+            voiceStatus.innerHTML = `⚠️ **ERROR:** ${event.error}. Click voice button to restart.`;
             voiceStatus.style.color = '#ff6b35';
         }
+        isVoiceEnabled = false;
+        updateVoiceButton();
     };
 
-    recognition.onend = function() {
-     
-        if (mode === 'stopwatch') {
-             recognition.start();
-        } else if (voiceStatus) {
-             voiceStatus.innerHTML = '💤 Voice Control is inactive in Countdown Mode.';
+    voiceRecognition.onend = function() {
+        if (isVoiceEnabled && mode === 'stopwatch') {
+            // Auto-restart if voice is enabled
+            setTimeout(() => {
+                if (isVoiceEnabled) {
+                    voiceRecognition.start();
+                }
+            }, 1000);
         }
     };
+}
 
-    recognition.start();
+function toggleVoiceControl() {
+    if (!voiceRecognition) return;
+    
+    isVoiceEnabled = !isVoiceEnabled;
+    
+    if (isVoiceEnabled) {
+        voiceRecognition.start();
+        showVoiceStatus('🎤 **VOICE ACTIVATED** - Say commands now!', '#43c6ac');
+    } else {
+        voiceRecognition.stop();
+        showVoiceStatus('🔇 **VOICE DISABLED**', '#666');
+    }
+    
+    updateVoiceButton();
+    // Save preference
+    localStorage.setItem('voiceEnabled', isVoiceEnabled);
+}
+
+function updateVoiceButton() {
+    const voiceToggleBtn = $id('voice-toggle');
+    if (voiceToggleBtn) {
+        voiceToggleBtn.innerHTML = isVoiceEnabled ? 
+            '<i class="fas fa-microphone"></i> Voice ON' : 
+            '<i class="fas fa-microphone-slash"></i> Voice OFF';
+        voiceToggleBtn.style.background = isVoiceEnabled ? 
+            'linear-gradient(135deg, #43c6ac, #191654)' : 
+            'rgba(255, 255, 255, 0.1)';
+    }
+}
+
+function showVoiceStatus(message, color) {
+    const voiceStatus = $id('voice-command-status');
+    if (voiceStatus) {
+        voiceStatus.innerHTML = message;
+        voiceStatus.style.color = color;
+        voiceStatus.style.display = 'block';
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            if (isVoiceEnabled) {
+                voiceStatus.innerHTML = '<i class="fas fa-microphone-alt"></i> **LISTENING** for commands...';
+                voiceStatus.style.color = '#43c6ac';
+            }
+        }, 3000);
+    }
+}
+
+function toggleDarkMode() {
+    const checkbox = document.getElementById("light");
+    if (checkbox && !document.body.classList.contains('dark-mode')) {
+        checkbox.checked = true;
+        document.body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', true);
+    }
+}
+
+function toggleLightMode() {
+    const checkbox = document.getElementById("light");
+    if (checkbox && document.body.classList.contains('dark-mode')) {
+        checkbox.checked = false;
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('darkMode', false);
+    }
 }
 document.addEventListener('keydown', function(event) {
     switch(event.key.toLowerCase()) {

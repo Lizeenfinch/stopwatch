@@ -44,10 +44,25 @@ A modern, feature-rich stopwatch application with a beautiful UI, dark mode supp
 - 🏁 **Lap Beep** - Sound when recording laps
 - 🔔 **Optional Ticking** - Enable/disable ticking sound
 
+### 🎤 Voice Control (NEW!)
+- 🗣️ **Hands-Free Operation** - Control stopwatch with voice commands
+- 🎛️ **Toggle Control** - Enable/disable voice recognition with button
+- 🔄 **Smart Commands** - Natural language recognition ("Start", "Stop", "Reset", "Lap")
+- 💾 **Persistent Settings** - Voice preference saved across sessions
+- 🎯 **Advanced Commands** - "Export", "Dark mode", "Light mode" support
+
+### 📁 Export Functionality (NEW!)
+- 📊 **CSV Export** - Download lap times in spreadsheet format
+- 📅 **Timestamped Data** - Each export includes date and time
+- ⌨️ **Keyboard Shortcut** - Press 'E' to export when laps are available
+- 🗣️ **Voice Command** - Say "Export" to download lap times
+- 🎯 **Smart UI** - Export button appears only when laps are recorded
+
 ### ⌨️ Keyboard Shortcuts
 - **Space** - Start/Pause the stopwatch
 - **R** - Reset the stopwatch
 - **L** - Record a lap
+- **E** - Export lap times (NEW!)
 - **Enter** - Record a lap (alternative)
 - **Backspace** - Reset (alternative)
 - **P** - Start/Pause (alternative)
@@ -63,8 +78,15 @@ A modern, feature-rich stopwatch application with a beautiful UI, dark mode supp
 - 🌟 **Rounded Buttons** - Smooth, modern button design
 - 🎭 **Shadow Effects** - Depth and dimension
 - 🎬 **Smooth Animations** - Polished transitions
-- 🖼️ **Video Background** - Ambient lofi video backdrop
+- 🖼️ **Dynamic Video Background** - 4 rotating lofi videos with auto-switching
 - ✨ **Glassmorphism** - Frosted glass aesthetic
+
+### 🎬 Dynamic Video Backgrounds (NEW!)
+- 🔄 **Auto-Rotation** - Videos change every 5 seconds randomly
+- 🎮 **Manual Controls** - Click indicators or use keyboard shortcuts
+- 🗣️ **Voice Control** - "Next video", "Previous video" commands
+- ⌨️ **Keyboard Shortcuts** - Ctrl+Arrow keys for navigation
+- 📱 **Performance Optimized** - Smart resource management
 
 ### ⏳ Additional Timers
 - 🍅 **Pomodoro Timer** - Focus with the classic Pomodoro technique
@@ -112,6 +134,11 @@ Simply visit [https://avinash201199.github.io/stopwatch/](https://avinash201199.
 | `Space` | Start/Pause |
 | `R` | Reset |
 | `L` | Record Lap |
+| `E` | Export Laps |
+| `Ctrl+→` | Next Video (NEW!) |
+| `Ctrl+←` | Previous Video (NEW!) |
+| `Ctrl+1-4` | Jump to Video 1-4 (NEW!) |
+| `Ctrl+V` | Toggle Auto-Rotation (NEW!) |
 | `Enter` | Record Lap |
 | `Backspace` | Reset |
 | `P` | Start/Pause |
@@ -311,9 +338,11 @@ stopwatch/
 ## 🌟 What's New in This Version
 
 ### Recent Enhancements (2025)
+- ✅ **Enhanced Voice Control** - Hands-free operation with natural language commands
+- ✅ **Lap Export Functionality** - Export lap times to CSV with timestamps
 - ✅ **Local Storage Support** - Never lose your progress on reload
 - ✅ **Enhanced Sound Effects** - Start, pause, reset, and lap sounds
-- ✅ **Improved Keyboard Shortcuts** - Space, R, L for quick actions
+- ✅ **Improved Keyboard Shortcuts** - Space, R, L, E for quick actions
 - ✅ **Code Cleanup** - Better organization and comments
 - ✅ **Modern UI Updates** - Enhanced glassmorphism and animations
 - ✅ **Persistent Dark Mode** - Your theme preference is saved
