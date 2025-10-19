@@ -549,16 +549,29 @@ setInterval(() => {
 document.addEventListener('DOMContentLoaded', function() {
   const inputs = ['hoursInput', 'minutesInput', 'secondsInput'];
   
+  
   inputs.forEach(id => {
-    $id(id).addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        setCustomTime(
-          $id('hoursInput').value,
-          $id('minutesInput').value,
-          $id('secondsInput').value
-        );
-      }
+      $id(id).addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+              e.preventDefault();
+              setCustomTime(
+                  $id('hoursInput').value,
+                  $id('minutesInput').value,
+                  $id('secondsInput').value
+                );
+            }
+        });
     });
-  });
+
+    const submitBtn = $id('timeSetBtn');
+    submitBtn.addEventListener('click', function(e) {
+        
+            e.preventDefault();
+            setCustomTime(
+                $id('hoursInput').value,
+                $id('minutesInput').value,
+                $id('secondsInput').value
+              );
+          }
+    );
 });

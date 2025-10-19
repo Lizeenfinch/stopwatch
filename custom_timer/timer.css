@@ -173,7 +173,7 @@ body > .container-fluid {
   box-shadow: none !important;
   text-align: center;
   transition: all 0.3s ease;
-  margin: 30px auto 0;
+  margin: 5rem 0 !important;
   max-width: 800px;
   width: 90%;
 }
@@ -756,7 +756,6 @@ button.btn.btn-outline-primary.button-pill.px-3:hover {
   transform: translate(-50%, -50%);
   width: 20px;
   height: 20px;
-  /* background-color: #ffffff; */
   border-radius: 50%;
   opacity: 0;
   transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
@@ -780,10 +779,10 @@ button.btn.btn-outline-primary.button-pill.px-3:hover {
 /* Delete icon for preset buttons */
 .delete-icon {
   position: absolute;
-  bottom: -35px;
+  bottom: -40px;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
-  background-color: #ff4757;
+  background-color:rgba(240, 147, 251, 0.3);
   color: white;
   width: 30px;
   height: 30px;
@@ -797,7 +796,7 @@ button.btn.btn-outline-primary.button-pill.px-3:hover {
   transition: all 0.3s ease;
   z-index: 10;
   font-size: 14px;
-  box-shadow: 0 4px 8px rgba(255, 71, 87, 0.3);
+  box-shadow: 0 4px 8px rgba(192, 0, 213, 0.4);
 }
 
 .preset-timer-btn:hover .delete-icon {
@@ -1052,10 +1051,6 @@ body.dark-mode .thinner {
   backdrop-filter: blur(20px);
 }
 
-body.dark-mode .navbar-collapse {
-  background: rgba(0, 0, 0, 0.9) !important;
-}
-
 body.dark-mode .nav-item > a {
   background-color: rgba(255, 255, 255, 0.1) !important;
   color: white !important;
@@ -1268,12 +1263,16 @@ body.dark-mode .animated-button span:last-child {
 }
 
 body.dark-mode .preset-btn {
-  color: #ff6b35 !important;
-  box-shadow: 0 0 0 2px #ff6b3520 !important;
+  /* color: #ff6b35 !important; */
+  color: #f093fb !important;
+  /* background-color: white !important; */
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6) !important;
+  /* box-shadow: 0 0 0 2px #ff6b3520 !important; */
 }
 
 body.dark-mode .preset-btn:hover {
-  box-shadow: 0 0 0 5px #ff6b3560 !important;
+  /* box-shadow: 0 0 0 5px #ff6b3560 !important; */
+  box-shadow: 0 0 0 3px white, 0 10px 30px rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Navigation links always dark */
