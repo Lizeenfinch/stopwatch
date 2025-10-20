@@ -1451,3 +1451,432 @@ body.dark-mode #countdown-minutes {
 body.dark-mode #countdown-minutes::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
+
+/* ============================================
+   ANIMATED PROGRESS CIRCLE STYLES
+   ============================================ */
+
+#progress-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.progress-circle {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.progress-ring-background {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 8;
+}
+
+.progress-ring-circle {
+  fill: none;
+  stroke: #00ff88;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 879.646; /* 2 * π * 140 */
+  stroke-dashoffset: 879.646;
+  transition: stroke-dashoffset 0.3s ease;
+  filter: drop-shadow(0 0 10px #00ff88);
+}
+
+.progress-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Lap Progress Bars */
+#lap-progress-bars {
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+#lap-progress-bars h4 {
+  color: white;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.lap-bar {
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 30px;
+  position: relative;
+}
+
+.lap-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #00ccff);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.lap-bar-text {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  z-index: 1;
+}
+
+/* ============================================
+   THEME PACKS / SEASONAL THEMES
+   ============================================ */
+
+#theme-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.theme-dropdown {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: white;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.theme-dropdown option {
+  background: #333;
+  color: white;
+}
+
+/* Halloween Theme */
+body.halloween-theme {
+  --primary-color: #ff6b35;
+  --secondary-color: #8b4513;
+  --accent-color: #ffa500;
+}
+
+body.halloween-theme .progress-ring-circle {
+  stroke: #ff6b35;
+  filter: drop-shadow(0 0 15px #ff6b35);
+}
+
+body.halloween-theme .digit {
+  color: #ff6b35 !important;
+  text-shadow: 0 0 20px #ff6b35;
+}
+
+body.halloween-theme .txt {
+  color: #ffa500 !important;
+}
+
+body.halloween-theme .buttons {
+  border-color: #ff6b35 !important;
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.3);
+}
+
+body.halloween-theme .video-overlay {
+  background: rgba(139, 69, 19, 0.4) !important;
+}
+
+/* Winter Theme */
+body.winter-theme {
+  --primary-color: #87ceeb;
+  --secondary-color: #4682b4;
+  --accent-color: #b0e0e6;
+}
+
+body.winter-theme .progress-ring-circle {
+  stroke: #87ceeb;
+  filter: drop-shadow(0 0 15px #87ceeb);
+}
+
+body.winter-theme .digit {
+  color: #87ceeb !important;
+  text-shadow: 0 0 20px #87ceeb;
+}
+
+body.winter-theme .txt {
+  color: #b0e0e6 !important;
+}
+
+body.winter-theme .buttons {
+  border-color: #87ceeb !important;
+  box-shadow: 0 0 15px rgba(135, 206, 235, 0.3);
+}
+
+body.winter-theme .video-overlay {
+  background: rgba(70, 130, 180, 0.3) !important;
+}
+
+/* Summer Theme */
+body.summer-theme {
+  --primary-color: #ffd700;
+  --secondary-color: #ff8c00;
+  --accent-color: #ffff00;
+}
+
+body.summer-theme .progress-ring-circle {
+  stroke: #ffd700;
+  filter: drop-shadow(0 0 15px #ffd700);
+}
+
+body.summer-theme .digit {
+  color: #ffd700 !important;
+  text-shadow: 0 0 20px #ffd700;
+}
+
+body.summer-theme .txt {
+  color: #ffff00 !important;
+}
+
+body.summer-theme .buttons {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+body.summer-theme .video-overlay {
+  background: rgba(255, 140, 0, 0.2) !important;
+}
+
+/* Spring Theme */
+body.spring-theme {
+  --primary-color: #98fb98;
+  --secondary-color: #32cd32;
+  --accent-color: #90ee90;
+}
+
+body.spring-theme .progress-ring-circle {
+  stroke: #98fb98;
+  filter: drop-shadow(0 0 15px #98fb98);
+}
+
+body.spring-theme .digit {
+  color: #98fb98 !important;
+  text-shadow: 0 0 20px #98fb98;
+}
+
+body.spring-theme .txt {
+  color: #90ee90 !important;
+}
+
+body.spring-theme .buttons {
+  border-color: #98fb98 !important;
+  box-shadow: 0 0 15px rgba(152, 251, 152, 0.3);
+}
+
+body.spring-theme .video-overlay {
+  background: rgba(50, 205, 50, 0.2) !important;
+}
+
+/* Neon Theme */
+body.neon-theme {
+  --primary-color: #ff00ff;
+  --secondary-color: #00ffff;
+  --accent-color: #ff0080;
+}
+
+body.neon-theme .progress-ring-circle {
+  stroke: #ff00ff;
+  filter: drop-shadow(0 0 20px #ff00ff);
+}
+
+body.neon-theme .digit {
+  color: #ff00ff !important;
+  text-shadow: 0 0 30px #ff00ff, 0 0 40px #ff00ff;
+}
+
+body.neon-theme .txt {
+  color: #00ffff !important;
+  text-shadow: 0 0 20px #00ffff;
+}
+
+body.neon-theme .buttons {
+  border-color: #ff00ff !important;
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+}
+
+body.neon-theme .video-overlay {
+  background: rgba(128, 0, 128, 0.3) !important;
+}
+
+/* ============================================
+   ANIMATED BACKGROUNDS
+   ============================================ */
+
+.animated-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Particles Background */
+.particles-bg {
+  background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+}
+
+.particle {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* Waves Background */
+.waves-bg {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: wave 4s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0% { transform: translateX(-50%) translateY(0px); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+  100% { transform: translateX(-50%) translateY(0px); }
+}
+
+/* Matrix Rain Background */
+.matrix-bg {
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-char {
+  position: absolute;
+  color: #0f0;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  animation: matrix-fall 3s linear infinite;
+}
+
+@keyframes matrix-fall {
+  0% { transform: translateY(-100vh); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Starfield Background */
+.stars-bg {
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Background Controls */
+#background-controls {
+  transition: all 0.3s ease;
+}
+
+#background-controls.hidden {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+#bg-toggle {
+  transition: all 0.3s ease;
+}
+
+#bg-toggle:hover {
+  background: rgba(255,255,255,0.4) !important;
+  transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .progress-ring {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .progress-ring-background,
+  .progress-ring-circle {
+    r: 115;
+    cx: 125;
+    cy: 125;
+  }
+  
+  #theme-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  #background-controls {
+    right: 10px;
+    top: 80px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .progress-ring {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .progress-ring-background,
+  .progress-ring-circle {
+    r: 90;
+    cx: 100;
+    cy: 100;
+  }
+  
+  .digit {
+    font-size: 2.5rem !important;
+  }
+  
+  .txt {
+    font-size: 1rem !important;
+  }
+}

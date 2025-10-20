@@ -23,11 +23,33 @@
 </head>
 
 <body>
+  <!-- Video Background -->
   <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -999;">
     <video width="100%" height="100%" autoplay muted loop style="object-fit: cover;">
       <source src="lofi.mp4" type="video/mp4">
     </video>
+    <div id="animated-background" class="animated-bg" style="display: none;"></div>
   </div>
+
+  <!-- Background Controls -->
+  <div id="background-controls"
+    style="position: fixed; top: 100px; right: 20px; z-index: 1001; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 15px; border-radius: 10px; display: none;">
+    <h5 style="color: white; margin-bottom: 10px;">Background</h5>
+    <select id="background-selector" class="theme-dropdown" style="margin-bottom: 10px;">
+      <option value="video">Video Background</option>
+      <option value="particles">Particles</option>
+      <option value="waves">Waves</option>
+      <option value="matrix">Matrix Rain</option>
+      <option value="stars">Starfield</option>
+    </select>
+    <input type="file" id="custom-video" accept="video/*" style="display: block; margin-top: 5px; color: white;">
+  </div>
+
+  <!-- Background Toggle Button -->
+  <button id="bg-toggle"
+    style="position: fixed; top: 100px; right: 20px; z-index: 1002; background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px; border-radius: 50%; cursor: pointer;">
+    🎨
+  </button>
 
   <div class="video-overlay"
     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); z-index: -998;">
@@ -69,14 +91,15 @@
         </ul>
         <div id="switch-theme">
           <input type="checkbox" id="light" class="checkbox">
-          <label for="light" class="label">
+          <label for="checkbox" class="label">
             <i class="fas fa-moon"></i>
             <i class='fas fa-sun'></i>
-            <div class='ball'></div>
+            <div class='ball'>
+              </ball>
+            </div>
           </label>
         </div>
       </div>
-    </div>
   </nav>
   <div class="container-fluid">
     <div id="container">
@@ -112,24 +135,42 @@
   </button>
 </div>
       <div>
-        <div id="time">
-          <span>
-            <span class="digit" id="hr">00</span>
-            <span class="txt">Hr</span>
-          </span>
-          <span>
-            <span class="digit" id="min">00</span>
-            <span class="txt">Min</span>
-          </span>
-          <span>
-            <span class="digit" id="sec">00</span>
-            <span class="txt">Sec</span>
-          </span>
-          <span>
-            <span class="digit" id="count">00</span>
-            <span class="txt">Ms</span>
-          </span>
+        <!-- Progress Circle Container -->
+        <div id="progress-container">
+          <div class="progress-circle" id="progress-circle">
+            <svg class="progress-ring" width="300" height="300">
+              <circle class="progress-ring-background" cx="150" cy="150" r="140" />
+              <circle class="progress-ring-circle" cx="150" cy="150" r="140" id="progress-ring-circle" />
+            </svg>
+            <div class="progress-content">
+              <div id="time">
+                <span>
+                  <span class="digit" id="hr">00</span>
+                  <span class="txt">Hr</span>
+                </span>
+                <span>
+                  <span class="digit" id="min">00</span>
+                  <span class="txt">Min</span>
+                </span>
+                <span>
+                  <span class="digit" id="sec">00</span>
+                  <span class="txt">Sec</span>
+                </span>
+                <span>
+                  <span class="digit" id="count">00</span>
+                  <span class="txt">Ms</span>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- Progress Bars for Laps -->
+        <div id="lap-progress-bars" style="display: none;">
+          <h4>Lap Progress</h4>
+          <div id="lap-bars-container"></div>
+        </div>
+
         <span class="todayDate">
           <h3><span id="d1"></span></h3>
         </span>
@@ -169,53 +210,68 @@
             <tbody id="record-table-body"></tbody>
           </table>
         </div>
-      </div>
-      <hr />
     </div>
   </div>
 
   <script type="text/javascript">
-    // start or stop stopwatch using "spacebar" key
+    // ============================================
+    // KEYBOARD SHORTCUTS
+    // ============================================
+    // Space = Start/Pause
     document.addEventListener("keydown", (event) => {
       if (event.code === "Space") {
         event.preventDefault();
         start();
       }
     });
+
+    // R = Reset
     document.addEventListener("keydown", (event) => {
-      if (event.code === "Backspace") {
+      if (event.code === "KeyR") {
+        event.preventDefault();
         reset();
       }
     });
+
+    // L = Lap
     document.addEventListener("keydown", (event) => {
-      if (event.code === "Enter") {
+      if (event.code === "KeyL") {
+        event.preventDefault();
         lap();
       }
     });
 
+    // Legacy shortcuts (kept for backward compatibility)
     document.addEventListener("keydown", (event) => {
-      if (event.code === "Numpad0") {
-        clearLap();
+      if (event.code === "Backspace") {
+        event.preventDefault();
+        reset();
+      }
+    });
+    
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Enter") {
+        event.preventDefault();
+        lap();
       }
     });
 
-    // P key for Start/Stop
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "Numpad0") {
+          clearLap();
+        }
+      });
+
     document.addEventListener("keydown", (event) => {
       if (event.code === "KeyP") {
         start();
       }
     });
 
-    // R key for Reset
-    document.addEventListener("keydown", (event) => {
-      if (event.code === "KeyR") {
-        reset();
-      }
-    });
-
   </script>
   <script src="script.js"></script>
 
+  <!-- FOOTER -->
   <footer>
     <div class="container-fluid my-class foot">
       <div class="container">
@@ -235,10 +291,6 @@
               <a href="https://www.instagram.com/lets__code/">
                 <img class="link" src="./img/Instagram.png" /></a>
             </li>
-            <li class="hov">
-              <a href="mailto:avinash201199@gmail.com" target="_blank">
-                <img class="link" src="https://imgs.search.brave.com/DXIytMmHjldrUJakjU9t3eFXMuHdpB2usIQoinUsKkg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4t/aWNvbnMtcG5nLmZy/ZWVwaWsuY29tLzI1/Ni8zNTUvMzU1OTky/LnBuZz9zZW10PWFp/c193aGl0ZV9sYWJl/bA" /></a>
-            </li>
           </ul>
         </div>
       </div>
@@ -247,155 +299,6 @@
   </footer>
 
   <div id="confetti"></div>
-
-<style>
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.countdown-input {
-  width: 140px;
-  padding: 10px 1px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #f4a261, #e76f51);
-  color: #fff;
-  font-weight: 600;
-  font-size: 15px;
-  text-align: center;
-  cursor: text;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.3s ease, 0.3s ease;
-  outline: none;
-}
-
-.countdown-input:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #ffb703, #fb8500);
-}
-
-.countdown-input:focus {
-  border: 2px solid #ffb703;
-  background: rgba(255, 183, 3, 0.1);
-  color: #fff;
-}
-
-/* 🌙 Night Mode (default) */
-.countdown-btn {
-  margin-left: 15px;
-  padding: 10px 18px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f4a261, #e76f51);
-  color: #fff;
-  font-weight: 600;
-  font-size: 15px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-.countdown-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #ffb703, #fb8500);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
-}
-
-/* ☀️ Day Mode */
-.light-mode .countdown-btn {
-  background: rgb(0, 51, 51);
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-.light-mode .countdown-btn:hover {
-  background: rgb(0, 77, 77);
-  transform: scale(1.05);
-}
-
-/* 🎯 Timer Preset Buttons - Rectangular Style */
-.preset-btn {
-  position: relative;
-  display: inline-block;
-  padding: 10px 18px;
-  border: none;
-  font-size: 15px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  font-weight: 600;
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(6px);
-  min-width: 100px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.preset-btn:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #f4a261, #e76f51);
-  border-color: #ffb703;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-}
-
-.preset-btn:active {
-  transform: scale(0.98);
-}
-
-.preset-btn.active {
-  background: linear-gradient(135deg, #ffb703, #fb8500);
-  color: #000;
-  border-color: #ffb703;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
-}
-
-/* Dark Mode Preset Buttons */
-body.dark-mode .preset-btn {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 107, 53, 0.3);
-  color: #ff6b35;
-}
-
-body.dark-mode .preset-btn:hover {
-  background: linear-gradient(135deg, #ff6b35, #ff8c42);
-  border-color: #ff6b35;
-  color: #000;
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
-}
-
-body.dark-mode .preset-btn.active {
-  background: linear-gradient(135deg, #ff6b35, #ff8c42);
-  color: #000;
-  border-color: #ff6b35;
-  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.6);
-}
-
-/* Responsive Design for Preset Buttons */
-@media screen and (max-width: 768px) {
-  .preset-btn {
-    min-width: 80px;
-    padding: 8px 14px;
-    font-size: 14px;
-  }
-  
-  #timer-presets div {
-    gap: 8px !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .preset-btn {
-    min-width: 70px;
-    padding: 6px 12px;
-    font-size: 13px;
-  }
-  
-  #timer-presets div {
-    gap: 6px !important;
-  }
-}
-</style>
 </body>
 
 </html>
