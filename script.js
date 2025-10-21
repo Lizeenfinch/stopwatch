@@ -39,8 +39,18 @@ let isTickEnabled = false;
 // ============================================
 // INITIALIZATION & LOCAL STORAGE
 // ============================================
+
+function preloadAudio() {
+  const files = ['audio/beep_cut.mp3', 'audio/sound_trim.mp3', 'audio/ticking.mp3'];
+  files.forEach(src => {
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    audio.load();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-  // Load saved state from localStorage
+  preloadAudio();
   loadStopwatchState();
   
   // Load dark mode preference
@@ -283,7 +293,7 @@ function stopwatch() {
     saveStopwatchState();
   }
 
-  timeoutId = setTimeout(stopwatch, 10);
+  timeoutId = setTimeout(stopwatch, 50);
 }
 
 // ============================================
