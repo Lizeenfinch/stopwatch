@@ -485,13 +485,13 @@ countdownBtn.addEventListener("click", () => {
 // Countdown logic
 let countdownInterval;
 document.getElementById("start-countdown").addEventListener("click", () => {
-  let minutes = parseInt(document.getElementById("countdown-minutes").value);
-  if (isNaN(minutes) || minutes < 0) {
+  let minutes = parseFloat(document.getElementById("countdown-minutes").value);
+  if (isNaN(minutes) || minutes <= 0) {
     alert("Enter a valid number of minutes");
     return;
   }
 
-  let totalSeconds = minutes * 60;
+  let totalSeconds = Math.floor(minutes * 60);
   clearInterval(countdownInterval);
 
   if ($id("start"))
@@ -526,7 +526,7 @@ function setPresetTimer(minutes) {
   });
   
   // Set the input value
-  document.getElementById("countdown-minutes").value = minutes;
+  document.getElementById("countdown-minutes").value = minutes.toFixed(1);
   
   // Update active preset button
   document.querySelectorAll('.preset-btn').forEach(btn => {
