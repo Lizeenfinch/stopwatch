@@ -69,6 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // Setup dark mode toggle
   setupDarkModeToggle();
+  
+  // Initialize voice control (NEW)
+  initializeVoiceControl();
 });
 
 // Save stopwatch state to localStorage
@@ -222,6 +225,20 @@ function reset() {
 
   if ($id("record-table-body")) $id("record-table-body").innerHTML = "";
   lapCounter = 1;
+
+    // CLEAR COUNTDOWN INPUT & PRESETS
+  const countdownInput = $id("countdown-minutes");
+  if (countdownInput) {
+    countdownInput.value = "";
+    countdownInput.style.border = "2px solid rgba(255, 255, 255, 0.3)";
+    countdownInput.style.background = "rgba(255, 255, 255, 0.08)";
+    countdownInput.style.color = "white";
+    countdownInput.style.transform = "scale(1)";
+  }
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
   
   // Clear saved state
   localStorage.removeItem('stopwatchState');
@@ -318,7 +335,7 @@ function lap() {
 
     const table = $id("record-table-body");
     if (table) {
-      const row = table.insertRow(0);
+      const row = table.insertCell(0);
       const no_cell = row.insertCell(0);
       const time_cell = row.insertCell(1);
       const diff_cell = row.insertCell(2);
@@ -517,3 +534,128 @@ function setPresetTimer(minutes) {
     input.style.color = "white";
   }, 300);
 }
+// ============================================
+// VOICE COMMAND CONTROL (NEW FEATURE)
+// ============================================
+
+function initializeVoiceControl() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const voiceStatus = $id('voice-command-status');
+
+    if (!SpeechRecognition) {
+        if (voiceStatus) {
+            voiceStatus.style.display = 'block';
+            voiceStatus.innerHTML = '❌ Voice control not supported in this browser.';
+            voiceStatus.style.color = '#ff0000';
+        }
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = function() {
+        if (voiceStatus) {
+            voiceStatus.style.display = 'block';
+            voiceStatus.innerHTML = '<i class="fas fa-microphone-alt"></i> **LISTENING:** Say "Start", "Stop", "Reset", or "Lap"';
+            voiceStatus.style.color = '#43c6ac';
+        }
+    };
+
+    recognition.onresult = function(event) {
+        const last = event.results.length - 1;
+        const rawCommand = event.results[last][0].transcript.trim();
+        const command = rawCommand.toLowerCase();
+        
+        if (voiceStatus) {
+            voiceStatus.innerHTML = `<i class="fas fa-bullhorn"></i> **COMMAND HEARD:** "${rawCommand}"`;
+            voiceStatus.style.color = '#ffd166';
+        }
+
+        if (mode === 'stopwatch') {
+            if (command.includes('start') || command.includes('stop') || command.includes('pause')) {
+                start();
+                if (voiceStatus) {
+                    const action = timer ? 'Started' : 'Paused';
+                    const icon = timer ? '<i class="fas fa-running"></i>' : '<i class="fas fa-pause-circle"></i>';
+                    voiceStatus.innerHTML = `${icon} **ACTION:** Stopwatch ${action}.`;
+                    voiceStatus.style.color = '#00ff00';
+                }
+            } else if (command.includes('reset')) {
+                reset();
+                if (voiceStatus) {
+                    voiceStatus.innerHTML = '<i class="fas fa-undo"></i> **ACTION:** Stopwatch Reset.';
+                    voiceStatus.style.color = '#00ff00';
+                }
+            } else if (command.includes('lap')) {
+                lap();
+                if (voiceStatus) {
+                    voiceStatus.innerHTML = '<i class="fas fa-stopwatch"></i> **ACTION:** Lap Recorded.';
+                    voiceStatus.style.color = '#00ff00';
+                }
+            } else {
+                 // Reset status for unrecognized command
+                if (voiceStatus) {
+                    voiceStatus.innerHTML = '🤷 **DID NOT RECOGNIZE:** Please try "Start" or "Reset"';
+                    voiceStatus.style.color = '#ff6b35';
+                }
+            }
+        }
+    };
+
+    recognition.onerror = function(event) {
+        if (voiceStatus) {
+            voiceStatus.innerHTML = `⚠️ **ERROR:** Restarting voice service.`;
+            voiceStatus.style.color = '#ff6b35';
+        }
+    };
+
+    recognition.onend = function() {
+     
+        if (mode === 'stopwatch') {
+             recognition.start();
+        } else if (voiceStatus) {
+             voiceStatus.innerHTML = '💤 Voice Control is inactive in Countdown Mode.';
+        }
+    };
+
+    recognition.start();
+}
+document.addEventListener('keydown', function(event) {
+    switch(event.key.toLowerCase()) {
+        case ' ':
+            event.preventDefault();
+            startPauseStopwatch(); 
+            break;
+        case 'r':
+            resetStopwatch();
+            break;
+        case 'l':
+            recordLap();
+            break;
+        case 'c':
+            startCountdownTimer();
+            break;
+    }
+});
+function startPauseStopwatch() {
+    start();
+}
+function resetStopwatch() {
+    reset();
+}
+function recordLap() {
+    lap();
+}
+function startCountdownTimer() {
+    if (mode === "countdown") {
+        document.getElementById("start-countdown").click();
+    } else {
+        mode = "countdown";
+        countdownBtn.click();
+        document.getElementById("start-countdown").click();
+    } 
+}
+
