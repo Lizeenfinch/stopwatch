@@ -173,7 +173,7 @@ body > .container-fluid {
   box-shadow: none !important;
   text-align: center;
   transition: all 0.3s ease;
-  margin: 5rem 0 !important;
+  margin: 30px auto 0;
   max-width: 800px;
   width: 90%;
 }
@@ -723,109 +723,6 @@ button.btn.btn-outline-primary.button-pill.px-3:hover {
   opacity: 1;
 }
 
-/* Preset button styles */
-#preset-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin : 20px 0;
-}
-
-.preset-btn {
-  position: relative;
-  display: inline-block;
-  padding: 8px 20px;
-  margin: 8px;
-  border: none;
-  font-size: 15px;
-  background-color: inherit;
-  border-radius: 100px;
-  font-weight: 600;
-  color: #ffffff;
-  box-shadow: 0 0 0 2px #ffffff;
-  cursor: pointer;
-  overflow: visible;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-}
-
-.preset-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  opacity: 0;
-  transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
-  z-index: 0;
-}
-
-.preset-btn:hover {
-  box-shadow: 0 0 0 5px #21f35960;
-}
-
-.preset-btn:active {
-  scale: 0.95;
-}
-
-.preset-btn:hover::before {
-  width: 150px;
-  height: 150px;
-  opacity: 1;
-}
-
-/* Delete icon for preset buttons */
-.delete-icon {
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background-color:rgba(240, 147, 251, 0.3);
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 10;
-  font-size: 14px;
-  box-shadow: 0 4px 8px rgba(192, 0, 213, 0.4);
-}
-
-.preset-timer-btn:hover .delete-icon {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: all;
-}
-
-.delete-icon:hover {
-  background-color: #ff6b7a;
-  transform: translateX(-50%) translateY(0) scale(1.1);
-  box-shadow: 0 6px 12px rgba(255, 71, 87, 0.5);
-}
-
-.delete-icon:active {
-  transform: translateX(-50%) translateY(0) scale(0.95);
-}
-
-#preset-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding-bottom: 40px;
-}
-
-/* Footer Styles - Standardized */
-/* Social links for footer */
 .hov {
   width: max(4.5vw, 3rem);
   height: max(4.5vw, 3rem);
@@ -877,20 +774,6 @@ li.hov {
   color: white;
   font-size: 18px;
   transition: all 0.3s ease;
-  border: 2px solid rgba(255, 209, 102, 0.3);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  object-fit: contain;
-}
-
-.hov:hover .link {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(255, 209, 102, 0.7);
-  border-color: rgba(255, 209, 102, 1);
-  filter: brightness(1.1) drop-shadow(0 0 5px rgba(255, 209, 102, 0.5));
-}
-
-.social-container a:hover .social-icon {
-  transform: scale(1.1);
   border: 2px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
@@ -1049,6 +932,10 @@ body.dark-mode {
 body.dark-mode .thinner {
   background: rgba(0, 0, 0, 0.3) !important;
   backdrop-filter: blur(20px);
+}
+
+body.dark-mode .navbar-collapse {
+  background: rgba(0, 0, 0, 0.9) !important;
 }
 
 body.dark-mode .nav-item > a {
@@ -1262,20 +1149,6 @@ body.dark-mode .animated-button span:last-child {
   background-color: white !important;
 }
 
-body.dark-mode .preset-btn {
-  /* color: #ff6b35 !important; */
-  color: #f093fb !important;
-  /* background-color: white !important; */
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6) !important;
-  /* box-shadow: 0 0 0 2px #ff6b3520 !important; */
-}
-
-body.dark-mode .preset-btn:hover {
-  /* box-shadow: 0 0 0 5px #ff6b3560 !important; */
-  box-shadow: 0 0 0 3px white, 0 10px 30px rgba(255, 255, 255, 0.3) !important;
-}
-
-/* Navigation links always dark */
 .nav-link {
   color: #003333 !important;
 }
