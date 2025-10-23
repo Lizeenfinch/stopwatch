@@ -389,17 +389,75 @@ async function openPipWindow() {
     }
     pipRequestInProgress = true;
     try {
-        // Request a new PiP window
+        // 1. Request a BLANK window
         pipWindow = await documentPictureInPicture.requestWindow({
-            width: 320,  // Set a good width
-            height: 120, // Set a good height
-            url: 'widget.html' // The new file we created
+            width: 320,
+            height: 120,
         });
 
-        // Add an event listener to know when the user closes it
-        pipWindow.addEventListener("pagehide", (e) => {
+        // 2. Add an event listener to know when the user closes it
+        pipWindow.addEventListener("pagehide", () => {
             pipWindow = null;
         });
+
+        // 3. Define the HTML and CSS to inject
+        // We use Roboto (from Google Fonts) as we can't load the local digital-7.ttf file
+        const widgetHTML = `
+        <html>
+        <head>
+            <title>Timer Widget</title>
+            <style>
+                /* Import Roboto from Google Fonts (this will work) */
+                @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+                
+                body {
+                    margin: 0;
+                    padding: 10px;
+                    background-color: #1a1a1a; /* Dark background */
+                    color: #FF8C00; /* Orange color from main page */
+                    font-family: 'Roboto', sans-serif; /* Use Roboto */
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    overflow: hidden;
+                }
+                #time {
+                    font-size: 3.5rem; /* Large font */
+                    font-weight: 300; /* Lighter weight */
+                    white-space: nowrap;
+                }
+                #time .txt {
+                    font-size: 3rem;
+                    margin: 0 0.25rem;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="time">
+                <span class="digit" id="hours">00</span>
+                <span class="txt">:</span>
+                <span class="digit" id="minutes">00</span>
+                <span class="txt">:</span>
+                <span class="digit" id="seconds">00</span>
+            </div>
+
+            <script>
+                window.addEventListener("message", (e) => {
+                    if (e.data.hours !== undefined) {
+                        document.getElementById('hours').textContent = e.data.hours;
+                        document.getElementById('minutes').textContent = e.data.minutes;
+                        document.getElementById('seconds').textContent = e.data.seconds;
+                    }
+                });
+            </script>
+        </body>
+        </html>
+        `;
+
+        // 4. Write this HTML into the blank window's document
+        pipWindow.document.write(widgetHTML);
+        pipWindow.document.close();
 
     } catch (err) {
         console.error("PiP Error: ", err);
