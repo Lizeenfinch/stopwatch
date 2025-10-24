@@ -24,6 +24,11 @@ var lapCounter = 1;
 
 let timerInterval = null;
 
+// --- ADDED FOR PiP ---
+let pipWindow = null;
+let pipRequestInProgress = false;
+// --- END PiP ---
+
 // ============================================
 // SOUND EFFECTS
 // ============================================
@@ -191,6 +196,7 @@ function start() {
 // -- Stop (explicit) -----------------
 function stop() {
   timer = false;
+  closePipWindow(); // --- ADDED FOR PiP ---
   tickSound.pause();
   tickSound.currentTime = 0;
   if ($id("start"))
@@ -201,6 +207,7 @@ function stop() {
 function reset() {
   if ($id("record-container")) $id("record-container").style.display = "none";
   timer = false;
+  closePipWindow(); // --- ADDED FOR PiP ---
   
   // Play beep sound on reset
   playSound(beepSound);
@@ -277,6 +284,18 @@ function stopwatch() {
   if ($id("min")) $id("min").innerHTML = minString;
   if ($id("sec")) $id("sec").innerHTML = secString;
   if ($id("count")) $id("count").innerHTML = countString;
+
+  // --- ADDED FOR PiP ---
+  // If the PiP window is open, send it the new time
+  if (pipWindow) {
+      pipWindow.postMessage({
+          hr: hrString,
+          min: minString,
+          sec: secString,
+          count: countString // Send all four values
+      });
+  }
+  // --- END PiP ---
 
   // Save state periodically (every second)
   if (count % 100 === 0) {
@@ -466,13 +485,13 @@ countdownBtn.addEventListener("click", () => {
 // Countdown logic
 let countdownInterval;
 document.getElementById("start-countdown").addEventListener("click", () => {
-  let minutes = parseInt(document.getElementById("countdown-minutes").value);
-  if (isNaN(minutes) || minutes < 0) {
+  let minutes = parseFloat(document.getElementById("countdown-minutes").value);
+  if (isNaN(minutes) || minutes <= 0) {
     alert("Enter a valid number of minutes");
     return;
   }
 
-  let totalSeconds = minutes * 60;
+  let totalSeconds = Math.floor(minutes * 60);
   clearInterval(countdownInterval);
 
   if ($id("start"))
@@ -507,7 +526,7 @@ function setPresetTimer(minutes) {
   });
   
   // Set the input value
-  document.getElementById("countdown-minutes").value = minutes;
+  document.getElementById("countdown-minutes").value = minutes.toFixed(1);
   
   // Update active preset button
   document.querySelectorAll('.preset-btn').forEach(btn => {
@@ -659,3 +678,46 @@ function startCountdownTimer() {
     } 
 }
 
+// ============================================
+// PICTURE-IN-PICTURE (PiP) WIDGET FUNCTIONS
+// ============================================
+
+async function openPipWindow() {
+    if (pipWindow || pipRequestInProgress) return;
+    pipRequestInProgress = true;
+    try {
+        pipWindow = await documentPictureInPicture.requestWindow({
+            width: 400, // A bit wider for the 4th field
+            height: 120,
+            url: 'Floating_Widget/stopwatch_widget.html' // Point to our new widget
+        });
+        
+        pipWindow.addEventListener("pagehide", () => {
+            pipWindow = null;
+        });
+
+    } catch (err) {
+        console.error("PiP Error: ", err);
+    } finally {
+        pipRequestInProgress = false;
+    }
+}
+
+function closePipWindow() {
+    if (pipWindow) {
+        pipWindow.close();
+        pipWindow.null;
+    }
+}
+
+function handleVisibilityChange() {
+    // 'timer' is the boolean in this file that tracks if the stopwatch is running
+    if (document.hidden && timer) {
+        openPipWindow();
+    } else {
+        closePipWindow();
+    }
+}
+
+// Listen for tab switching
+document.addEventListener("visibilitychange", handleVisibilityChange);
