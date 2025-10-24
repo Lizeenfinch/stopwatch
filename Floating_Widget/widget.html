@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch Widget</title>
+    
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="stopwatch_widget.css">
+</head>
+<body>
+
+    <div id="time">
+        <span class="digit" id="hr">00</span>
+        <span class="txt">:</span>
+        <span class="digit" id="min">00</span>
+        <span class="txt">:</span>
+        <span class="digit" id="sec">00</span>
+        <span class="txt">:</span>
+        <span class="digit" id="count">00</span>
+    </div>
+
+    <script>
+        // Listen for time updates from the main script.js
+        window.addEventListener("message", (e) => {
+            if (e.data.hr !== undefined) {
+                document.getElementById('hr').textContent = e.data.hr;
+                document.getElementById('min').textContent = e.data.min;
+                document.getElementById('sec').textContent = e.data.sec;
+                document.getElementById('count').textContent = e.data.count;
+            }
+        });
+    </script>
+</body>
+</html>
