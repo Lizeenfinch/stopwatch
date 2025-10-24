@@ -1,96 +1,93 @@
-# ⏱️ Stopwatch by Hector JS
+# ⏱️ Stopwatch by Hector JS 🎉
 
-**Web link** - https://avinash201199.github.io/stopwatch/
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue?style=for-the-badge&logo=appveyor)](https://avinash201199.github.io/stopwatch/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Hacktoberfest 2025](https://img.shields.io/badge/Hacktoberfest-2025-orange?style=for-the-badge)]()
 
-A modern, feature-rich stopwatch application with a beautiful UI, dark mode support, and advanced functionality. Built with vanilla JavaScript, HTML, and CSS.
+A **modern, feature-rich stopwatch** with beautiful UI, dark mode support, and advanced functionality. Built with **vanilla JavaScript, HTML, and CSS**.
+
+---
 
 ## 🎯 Overview
 
-**Time** is the most essential part of everyone's life and keeping track of this time is equally important. This **stopwatch** represents the time in **HH:MM:SS:MS** `(hour:minute:second:millisecond)` format, making it easy to keep track of your time with precision.
+Time is precious, and tracking it precisely is essential.  
+This **Stopwatch** displays time in **HH:MM:SS:MS** `(hour:minute:second:millisecond)` format.  
+It includes **Pomodoro timers, custom countdown timers**, and **persistent dark/light mode**.
 
-![Untitled design](https://user-images.githubusercontent.com/114678694/194710310-87a8fa0e-7f8d-4cd7-a4ff-5b9dc9b008a5.png)
+![Stopwatch Preview](https://user-images.githubusercontent.com/114678694/194710310-87a8fa0e-7f8d-4cd7-a4ff-5b9dc9b008a5.png)
+
+---
 
 ## 🛠️ Tech Stack
 
-- **HTML5** - Semantic markup
-- **CSS3** - Modern styling with glassmorphism effects
-- **JavaScript (ES6+)** - Vanilla JS for optimal performance
-- **Bootstrap 5** - Responsive grid system
-- **Font Awesome** - Beautiful icons
+- **HTML5** - Semantic markup  
+- **CSS3** - Modern styling with glassmorphism & animations  
+- **JavaScript (ES6+)** - Vanilla JS for optimal performance  
+- **Bootstrap 5** - Responsive grid system  
+- **Font Awesome** - Beautiful icons  
+- **Audio** - Start, pause, reset, lap sounds  
+
+---
 
 ## ✨ Features
 
-### 🕒 Core Stopwatch Features
-- ⏲️ **Precise Time Display** - Shows time in **HH:MM:SS:MS** format
-- ▶️ **Start/Pause** - Toggle stopwatch with smooth animations
-- 🔄 **Reset** - Clear all time and lap records
-- 🏁 **Lap Timer** - Record multiple lap times with differences
-- 🗑️ **Clear Laps** - Remove all lap records
+### Core Stopwatch
+- ⏲️ **Precise Time Display**: HH:MM:SS:MS  
+- ▶️ **Start / Pause**: Smooth toggle  
+- 🔄 **Reset**: Clear time and laps  
+- 🏁 **Lap Timer**: Record multiple laps  
+- 🗑️ **Clear Laps**
 
-### 🌙 Dark / Light Mode Toggle
-- 🎨 **Theme Switching** - Seamlessly switch between dark and light themes
-- 💾 **Persistent Preference** - Your theme choice is saved automatically
-- 🌈 **Glassmorphism UI** - Beautiful frosted glass effects in both modes
+### Dark / Light Mode
+- 🌙 Seamless **theme switching**  
+- 💾 **Persistent Preference** saved automatically  
+- 🌈 **Glassmorphism UI** for a modern look  
 
-### 💾 Local Storage Support
-- 💿 **Auto-Save** - Stopwatch state is saved automatically
-- 🔄 **Resume on Reload** - Continue where you left off (24-hour persistence)
-- 🎯 **Smart Recovery** - Only restores recent sessions
+### Local Storage & Persistence
+- 💿 **Auto-save** stopwatch state  
+- 🔄 **Resume on reload** (up to 24 hours)  
+- 🎯 **Smart Recovery** restores recent sessions  
 
-### 🔊 Sound Effects
-- 🎵 **Start Sound** - Plays when stopwatch starts
-- ⏸️ **Pause Beep** - Confirmation sound on pause
-- 🔴 **Reset Beep** - Audio feedback on reset
-- 🏁 **Lap Beep** - Sound when recording laps
-- 🔔 **Optional Ticking** - Enable/disable ticking sound
+### Sound & Interactions
+- 🔊 Optional ticking sound  
+- 🎵 Audio feedback for start, pause, reset, laps  
+- ⌨️ **Keyboard Shortcuts**:
+  - Space → Start/Pause  
+  - R → Reset  
+  - L / Enter → Record Lap  
+  - Backspace → Reset  
+  - P → Start/Pause (alternative)  
+  - Numpad 0 → Clear Laps  
 
-### 🎤 Voice Control (NEW!)
-- 🗣️ **Hands-Free Operation** - Control stopwatch with voice commands
-- 🎛️ **Toggle Control** - Enable/disable voice recognition with button
-- 🔄 **Smart Commands** - Natural language recognition ("Start", "Stop", "Reset", "Lap")
-- 💾 **Persistent Settings** - Voice preference saved across sessions
-- 🎯 **Advanced Commands** - "Export", "Dark mode", "Light mode" support
+### Additional Timers
+- 🍅 **Pomodoro Timer**  
+- ⏲️ **Custom Countdown Timer**  
 
-### 📁 Export Functionality (NEW!)
-- 📊 **CSV Export** - Download lap times in spreadsheet format
-- 📅 **Timestamped Data** - Each export includes date and time
-- ⌨️ **Keyboard Shortcut** - Press 'E' to export when laps are available
-- 🗣️ **Voice Command** - Say "Export" to download lap times
-- 🎯 **Smart UI** - Export button appears only when laps are recorded
+### Responsive & Modern UI
+- 📱 Mobile & tablet optimized  
+- 💻 Desktop ready with adaptive layout  
+- 🎨 Touch-friendly buttons  
+- 🌟 Rounded buttons with smooth animations  
+- 🖼️ Optional lofi video background  
 
-### ⌨️ Keyboard Shortcuts
-- **Space** - Start/Pause the stopwatch
-- **R** - Reset the stopwatch
-- **L** - Record a lap
-- **E** - Export lap times (NEW!)
-- **Enter** - Record a lap (alternative)
-- **Backspace** - Reset (alternative)
-- **P** - Start/Pause (alternative)
-- **Numpad 0** - Clear all laps
+---
 
-### 📱 Responsive Design
-- 📱 **Mobile Optimized** - Perfect on phones and tablets
-- 💻 **Desktop Ready** - Beautiful on large screens
-- 🔄 **Adaptive Layout** - Adjusts to any screen size
-- 🎨 **Touch Friendly** - Large, easy-to-tap buttons
+## 🚀 Quick Start
 
-### 🎨 Modern UI Design
-- 🌟 **Rounded Buttons** - Smooth, modern button design
-- 🎭 **Shadow Effects** - Depth and dimension
-- 🎬 **Smooth Animations** - Polished transitions
-- 🖼️ **Dynamic Video Background** - 4 rotating lofi videos with auto-switching
-- ✨ **Glassmorphism** - Frosted glass aesthetic
+### 1️⃣ Live Demo
+[Open Live Site](https://avinash201199.github.io/stopwatch/)
 
-### 🎬 Dynamic Video Backgrounds (NEW!)
-- 🔄 **Auto-Rotation** - Videos change every 5 seconds randomly
-- 🎮 **Manual Controls** - Click indicators or use keyboard shortcuts
-- 🗣️ **Voice Control** - "Next video", "Previous video" commands
-- ⌨️ **Keyboard Shortcuts** - Ctrl+Arrow keys for navigation
-- 📱 **Performance Optimized** - Smart resource management
+### 2️⃣ Run Locally
+```bash
+# Clone the repository
+git clone https://github.com/avinash201199/stopwatch.git
+cd stopwatch
 
-### ⏳ Additional Timers
-- 🍅 **Pomodoro Timer** - Focus with the classic Pomodoro technique
-- ⏲️ **Custom Timer** - Set your own countdown with alerts
+# Open index.html in browser
+# Or run a local server
+python -m http.server 8000
+# Then visit http://localhost:8000
+
 
 ## 🚀 Quick Start
 
@@ -165,6 +162,7 @@ Simply visit [https://avinash201199.github.io/stopwatch/](https://avinash201199.
 > Custom Timer
 
 <img width="922" alt="image" src="./img/readme_img/custome.png">
+
 
 ## 🤝 Contributing
 
@@ -368,11 +366,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Original creator: **Avinash Singh**
-- Enhanced by: **Hector JS** and the open-source community
-- Icons: Font Awesome
-- Fonts: Google Fonts
-- Video: Lofi background animation
+- **Original Creator:** Avinash Singh – for building the foundation of this stopwatch project  
+- **Enhancements & Contributions:** Hector JS and the amazing open-source community  
+- **Icons & Graphics:** Font Awesome – for the crisp and professional icons  
+- **Fonts:** Google Fonts – for the modern typography  
+- **Background Animation:** Lofi video animation – for the relaxing, aesthetic UI  
+- **Special Thanks:** To all contributors who help improve this project and make it Hacktoberfest-ready! 🎉
+
 
 ## 📞 Connect with the Creator
 
