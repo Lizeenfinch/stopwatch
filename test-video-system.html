@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Video Background System Test</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-pass { background: #4ade80; }
+        .status-fail { background: #f87171; }
+        .status-pending { background: #fbbf24; }
+        
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .video-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .video-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .controls-demo {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .control-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        #test-log {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎬 Dynamic Video Background System Test</h1>
+        <p>This page tests the video background rotation system functionality.</p>
+        
+        <div class="test-section">
+            <h2>📁 Video Files Check</h2>
+            <p>Testing if all 4 video files are available:</p>
+            
+            <div class="video-list">
+                <div class="video-item">
+                    <span class="status-indicator status-pending" id="video-1-status"></span>
+                    <strong>lofi.mp4</strong>
+                    <div id="video-1-info">Checking...</div>
+                </div>
+                <div class="video-item">
+                    <span class="status-indicator status-pending" id="video-2-status"></span>
+                    <strong>lofi1.mp4</strong>
+                    <div id="video-2-info">Checking...</div>
+                </div>
+                <div class="video-item">
+                    <span class="status-indicator status-pending" id="video-3-status"></span>
+                    <strong>lofi2.mp4</strong>
+                    <div id="video-3-info">Checking...</div>
+                </div>
+                <div class="video-item">
+                    <span class="status-indicator status-pending" id="video-4-status"></span>
+                    <strong>lofi3.mp4</strong>
+                    <div id="video-4-info">Checking...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🎮 Control Methods Test</h2>
+            <p>Test different ways to control video backgrounds:</p>
+            
+            <div class="controls-demo">
+                <div class="control-item">
+                    <strong>Auto-Rotation</strong><br>
+                    <small>Changes every 5 seconds</small>
+                </div>
+                <div class="control-item">
+                    <strong>Keyboard</strong><br>
+                    <small>Ctrl + Arrow Keys</small>
+                </div>
+                <div class="control-item">
+                    <strong>Voice Commands</strong><br>
+                    <small>"Next video"</small>
+                </div>
+                <div class="control-item">
+                    <strong>Click Indicators</strong><br>
+                    <small>Dots at bottom-right</small>
+                </div>
+            </div>
+            
+            <button class="test-button" onclick="testVideoSystem()">
+                🧪 Run System Test
+            </button>
+            
+            <button class="test-button" onclick="window.open('index.html', '_blank')">
+                🚀 Open Main App
+            </button>
+        </div>
+
+        <div class="test-section">
+            <h2>⌨️ Keyboard Shortcuts</h2>
+            <p>Test these keyboard combinations in the main app:</p>
+            
+            <div class="controls-demo">
+                <div class="control-item"><kbd>Ctrl + →</kbd> Next Video</div>
+                <div class="control-item"><kbd>Ctrl + ←</kbd> Previous Video</div>
+                <div class="control-item"><kbd>Ctrl + 1-4</kbd> Jump to Video</div>
+                <div class="control-item"><kbd>Ctrl + V</kbd> Toggle Auto-Rotation</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🗣️ Voice Commands</h2>
+            <p>Try these voice commands in the main app (enable voice first):</p>
+            
+            <div class="controls-demo">
+                <div class="control-item">"Next video"</div>
+                <div class="control-item">"Previous video"</div>
+                <div class="control-item">"Video one/two/three/four"</div>
+                <div class="control-item">"Random video"</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Test Results</h2>
+            <div id="test-log">
+                <div>🔍 Starting video system tests...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videoFiles = ['lofi.mp4', 'lofi1.mp4', 'lofi2.mp4', 'lofi3.mp4'];
+        const testLog = document.getElementById('test-log');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            testLog.innerHTML += `<div>[${timestamp}] ${icon} ${message}</div>`;
+            testLog.scrollTop = testLog.scrollHeight;
+        }
+        
+        async function checkVideoFile(filename, index) {
+            const statusEl = document.getElementById(`video-${index + 1}-status`);
+            const infoEl = document.getElementById(`video-${index + 1}-info`);
+            
+            try {
+                const response = await fetch(filename, { method: 'HEAD' });
+                if (response.ok) {
+                    statusEl.className = 'status-indicator status-pass';
+                    infoEl.textContent = '✅ Available';
+                    log(`Video ${index + 1} (${filename}) is available`, 'success');
+                    return true;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status-indicator status-fail';
+                infoEl.textContent = '❌ Missing';
+                log(`Video ${index + 1} (${filename}) is missing: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        async function testVideoSystem() {
+            log('🧪 Starting comprehensive video system test...');
+            
+            // Test 1: Check video files
+            log('📁 Checking video file availability...');
+            const videoResults = await Promise.all(
+                videoFiles.map((file, index) => checkVideoFile(file, index))
+            );
+            
+            const availableVideos = videoResults.filter(Boolean).length;
+            log(`📊 Found ${availableVideos}/4 video files`, availableVideos === 4 ? 'success' : 'warning');
+            
+            // Test 2: Check if main app has video system
+            log('🔍 Checking if main app has video background system...');
+            try {
+                const response = await fetch('index.html');
+                const html = await response.text();
+                
+                if (html.includes('VideoBackgroundManager')) {
+                    log('✅ Video background system is integrated in main app', 'success');
+                } else {
+                    log('❌ Video background system not found in main app', 'error');
+                }
+                
+                if (html.includes('video-background-container')) {
+                    log('✅ Video container structure is present', 'success');
+                } else {
+                    log('❌ Video container structure missing', 'error');
+                }
+                
+                if (html.includes('video-indicator')) {
+                    log('✅ Video indicators are implemented', 'success');
+                } else {
+                    log('❌ Video indicators missing', 'error');
+                }
+                
+            } catch (error) {
+                log(`❌ Error checking main app: ${error.message}`, 'error');
+            }
+            
+            // Test 3: Performance recommendations
+            log('⚡ Performance recommendations:');
+            if (availableVideos > 0) {
+                log('• Keep video files under 50MB for better loading', 'info');
+                log('• Use H.264 codec for best browser compatibility', 'info');
+                log('• Consider 720p resolution for balance of quality/performance', 'info');
+            }
+            
+            // Test 4: Browser compatibility
+            log('🌐 Browser compatibility check:');
+            const hasBackdropFilter = CSS.supports('backdrop-filter', 'blur(10px)');
+            const hasGrid = CSS.supports('display', 'grid');
+            const hasCustomProps = CSS.supports('color', 'var(--test)');
+            
+            log(`Backdrop Filter: ${hasBackdropFilter ? '✅' : '❌'}`, hasBackdropFilter ? 'success' : 'warning');
+            log(`CSS Grid: ${hasGrid ? '✅' : '❌'}`, hasGrid ? 'success' : 'warning');
+            log(`CSS Custom Properties: ${hasCustomProps ? '✅' : '❌'}`, hasCustomProps ? 'success' : 'warning');
+            
+            log('🎉 Video system test completed!', 'success');
+        }
+        
+        // Auto-run basic checks on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                log('🚀 Auto-running basic video file checks...');
+                videoFiles.forEach((file, index) => {
+                    checkVideoFile(file, index);
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

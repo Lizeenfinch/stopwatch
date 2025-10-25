@@ -131,6 +131,11 @@ Simply visit [https://avinash201199.github.io/stopwatch/](https://avinash201199.
 | `Space` | Start/Pause |
 | `R` | Reset |
 | `L` | Record Lap |
+| `E` | Export Laps |
+| `Ctrl+→` | Next Video (NEW!) |
+| `Ctrl+←` | Previous Video (NEW!) |
+| `Ctrl+1-4` | Jump to Video 1-4 (NEW!) |
+| `Ctrl+V` | Toggle Auto-Rotation (NEW!) |
 | `Enter` | Record Lap |
 | `Backspace` | Reset |
 | `P` | Start/Pause |
@@ -331,9 +336,11 @@ stopwatch/
 ## 🌟 What's New in This Version
 
 ### Recent Enhancements (2025)
+- ✅ **Enhanced Voice Control** - Hands-free operation with natural language commands
+- ✅ **Lap Export Functionality** - Export lap times to CSV with timestamps
 - ✅ **Local Storage Support** - Never lose your progress on reload
 - ✅ **Enhanced Sound Effects** - Start, pause, reset, and lap sounds
-- ✅ **Improved Keyboard Shortcuts** - Space, R, L for quick actions
+- ✅ **Improved Keyboard Shortcuts** - Space, R, L, E for quick actions
 - ✅ **Code Cleanup** - Better organization and comments
 - ✅ **Modern UI Updates** - Enhanced glassmorphism and animations
 - ✅ **Persistent Dark Mode** - Your theme preference is saved
