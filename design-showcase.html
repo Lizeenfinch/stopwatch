@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Modern Design Showcase - Stopwatch</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .showcase-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .demo-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .gradient-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .gradient-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="showcase-card">
+            <h1>🎨 Modern Stopwatch Design System</h1>
+            <p>A comprehensive redesign featuring glassmorphism, modern typography, and contemporary UI patterns.</p>
+            
+            <a href="index.html" class="demo-button">
+                🚀 View Live Demo
+            </a>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Design Tokens</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">15</span>
+                    <span class="stat-label">Components</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Animations</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Responsive</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="showcase-card">
+            <h2>🌈 Color System</h2>
+            <p>Modern gradient-based color palette with semantic meaning and accessibility in mind.</p>
+            
+            <div class="color-palette">
+                <div class="color-swatch gradient-1">Primary</div>
+                <div class="color-swatch gradient-2">Secondary</div>
+                <div class="color-swatch gradient-3">Success</div>
+                <div class="color-swatch gradient-4">Warning</div>
+                <div class="color-swatch gradient-5">Danger</div>
+            </div>
+        </div>
+
+        <div class="showcase-card">
+            <h2>✨ Key Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>🔮 Glassmorphism</h3>
+                    <p>Modern frosted glass effects with backdrop-filter blur for depth and elegance.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>📱 Responsive Grid</h3>
+                    <p>CSS Grid-based layout that adapts beautifully from mobile to desktop.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>🎭 Micro-Interactions</h3>
+                    <p>Smooth animations and hover effects that provide delightful user feedback.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>🎨 Modern Typography</h3>
+                    <p>Inter + JetBrains Mono font stack with fluid responsive scaling.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>♿ Accessibility</h3>
+                    <p>WCAG compliant with focus management, reduced motion, and high contrast support.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>🌙 Dark Mode</h3>
+                    <p>Seamless dark mode with persistent preferences and theme-aware components.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="showcase-card">
+            <h2>🚀 Technical Highlights</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>CSS Custom Properties</h3>
+                    <p>50+ design tokens for consistent theming and easy maintenance.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>Modern CSS Features</h3>
+                    <p>CSS Grid, Flexbox, clamp(), backdrop-filter, and more.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>Performance Optimized</h3>
+                    <p>GPU-accelerated animations and efficient CSS architecture.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>Progressive Enhancement</h3>
+                    <p>Works everywhere with graceful degradation for older browsers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="showcase-card">
+            <h2>📋 Implementation Details</h2>
+            
+            <h3>Files Modified:</h3>
+            <ul>
+                <li><strong>style.css</strong> - Complete design system overhaul</li>
+                <li><strong>index.html</strong> - Updated structure with modern components</li>
+                <li><strong>MODERN_DESIGN_GUIDE.md</strong> - Comprehensive documentation</li>
+            </ul>
+            
+            <h3>New Features:</h3>
+            <ul>
+                <li>Glassmorphism card containers</li>
+                <li>Grid-based timer display</li>
+                <li>Gradient button system</li>
+                <li>Animated background</li>
+                <li>Progress ring indicator</li>
+                <li>Modern control panel</li>
+                <li>Enhanced accessibility</li>
+                <li>Responsive design improvements</li>
+            </ul>
+            
+            <a href="MODERN_DESIGN_GUIDE.md" class="demo-button">
+                📖 Read Full Documentation
+            </a>
+        </div>
+
+        <div class="showcase-card">
+            <h2>🎯 Browser Support</h2>
+            <p>Modern features with progressive enhancement:</p>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h3>✅ Full Support</h3>
+                    <p>Chrome 79+, Firefox 72+, Safari 13.1+, Edge 79+</p>
+                </div>
+                
+                <div class="feature-item">
+                    <h3>⚠️ Partial Support</h3>
+                    <p>IE11, older mobile browsers (with fallbacks)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
