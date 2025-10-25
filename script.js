@@ -354,7 +354,7 @@ function lap() {
 
     const table = $id("record-table-body");
     if (table) {
-      const row = table.insertCell(0);
+      const row = table.insertRow(0);
       const no_cell = row.insertCell(0);
       const time_cell = row.insertCell(1);
       const diff_cell = row.insertCell(2);
