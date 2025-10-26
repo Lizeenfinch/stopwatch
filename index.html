@@ -23,9 +23,19 @@
 </head>
 
 <body>
-  <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -999;">
-    <video width="100%" height="100%" autoplay muted loop preload="metadata" playsinline style="object-fit: cover;">
+  <!-- Dynamic Video Background System -->
+  <div id="video-background-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -999; overflow: hidden;">
+    <video id="video-bg-1" class="background-video active" width="100%" height="100%" autoplay muted loop style="object-fit: cover; position: absolute; top: 0; left: 0; opacity: 1; transition: opacity 1s ease-in-out;">
       <source src="lofi.mp4" type="video/mp4">
+    </video>
+    <video id="video-bg-2" class="background-video" width="100%" height="100%" muted loop style="object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out;">
+      <source src="lofi1.mp4" type="video/mp4">
+    </video>
+    <video id="video-bg-3" class="background-video" width="100%" height="100%" muted loop style="object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out;">
+      <source src="lofi2.mp4" type="video/mp4">
+    </video>
+    <video id="video-bg-4" class="background-video" width="100%" height="100%" muted loop style="object-fit: cover; position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 1s ease-in-out;">
+      <source src="lofi3.mp4" type="video/mp4">
     </video>
   </div>
 
@@ -37,7 +47,7 @@
     <div class="container-fluid-nav">
       <div class="maintitle">
         <img src="./img/logo.gif"
-          style="height: 3rem; width: 3rem;margin-right:1rem; font-weight:bold; border-radius: 50%;" alt=""> <span
+          style="height: 3rem; width: 3rem;margin-right:1rem; font-weight:bold; border-radius: 50%;" alt="Stopwatch App Logo"> <span
           id="title1">Stop Watch</span>
       </div>
       <button class="navbar-toggler" style="background-color: rgb(77, 123, 247);" type="button"
@@ -103,7 +113,8 @@
     type="number" 
     id="countdown-minutes" 
     placeholder="Enter minutes..." 
-    min="0"
+    min="0.1"
+    step="0.1"
     class="countdown-input"
   />
 
@@ -111,47 +122,84 @@
     Start Countdown
   </button>
 </div>
-      <div>
+      <div class="timer-card animate-scale-in">
         <div id="time">
-          <span>
+          <div class="time-unit animate-slide-up" style="animation-delay: 0.1s;">
             <span class="digit" id="hr">00</span>
-            <span class="txt">Hr</span>
-          </span>
-          <span>
+            <span class="txt">Hours</span>
+          </div>
+          <div class="time-unit animate-slide-up" style="animation-delay: 0.2s;">
             <span class="digit" id="min">00</span>
-            <span class="txt">Min</span>
-          </span>
-          <span>
+            <span class="txt">Minutes</span>
+          </div>
+          <div class="time-unit animate-slide-up" style="animation-delay: 0.3s;">
             <span class="digit" id="sec">00</span>
-            <span class="txt">Sec</span>
-          </span>
-          <span>
+            <span class="txt">Seconds</span>
+          </div>
+          <div class="time-unit animate-slide-up" style="animation-delay: 0.4s;">
             <span class="digit" id="count">00</span>
-            <span class="txt">Ms</span>
-          </span>
+            <span class="txt">Millisec</span>
+          </div>
         </div>
-        <span class="todayDate">
+        <!-- Progress Ring -->
+        <div class="progress-ring" id="progress-ring" style="display: none;">
+          <svg width="120" height="120">
+            <circle cx="60" cy="60" r="54" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
+            <circle cx="60" cy="60" r="54" stroke="url(#gradient)" stroke-width="4" fill="none" 
+                    stroke-dasharray="339.292" stroke-dashoffset="339.292" id="progress-circle"/>
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#667eea"/>
+                <stop offset="100%" style="stop-color:#764ba2"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="progress-text">
+            <span id="progress-seconds">0</span>
+            <small>sec</small>
+          </div>
+        </div>
+        
+        <div class="todayDate animate-slide-up" style="animation-delay: 0.5s;">
           <h3><span id="d1"></span></h3>
-        </span>
+        </div>
       </div>
       <hr />
-      <div id="btn-container">
+      <div id="btn-container" class="animate-slide-up" style="animation-delay: 0.6s;">
         <button class="buttons" id="start" onclick="start()">
-          <i class="fas fa-play-circle"></i> Start
+          <i class="fas fa-play-circle"></i>
+          <span>Start</span>
         </button>
         <button class="buttons" id="reset" onclick="reset()">
-          <i class="fas fa-undo"></i> Reset
+          <i class="fas fa-undo"></i>
+          <span>Reset</span>
         </button>
         <button class="buttons" id="lap" onclick="lap()">
-          <i class="fas fa-stopwatch"></i> Lap
+          <i class="fas fa-stopwatch"></i>
+          <span>Lap</span>
         </button>
          <button class="buttons" id="clearlap" onclick="clearLap()">
-           <i class="fas fa-trash"></i> Clear Lap
+           <i class="fas fa-trash"></i>
+           <span>Clear</span>
          </button>
-         <label class="tick-label">
-           <input type="checkbox" id="tickToggle">
-           Enable Ticking Sound
-         </label>
+         
+         <button class="buttons" id="exportlap" onclick="exportLaps()" style="display: none;">
+           <i class="fas fa-download"></i>
+           <span>Export</span>
+         </button>
+
+        <label class="buttons" id="exportlap" >
+          <input type="checkbox" id="tickToggle">
+          <span class="">Ticking</span>
+        </label>
+          
+        <!-- Control Panel -->
+        <div class="control-panel">
+          <button id="voice-toggle" class="btn-voice" style="display: none;">
+            <i class="fas fa-microphone-slash"></i>
+            <span>Voice</span>
+          </button> 
+        </div>
        </div>
        
        <div id="voice-command-status" 
@@ -213,8 +261,253 @@
       }
     });
 
+    // E key for Export
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "KeyE") {
+        const exportBtn = document.getElementById("exportlap");
+        if (exportBtn && exportBtn.style.display !== "none") {
+          exportLaps();
+        }
+      }
+    });
+
   </script>
   <script src="script.js"></script>
+  
+  <!-- Dynamic Video Background Script -->
+  <script>
+    class VideoBackgroundManager {
+      constructor() {
+        this.videos = document.querySelectorAll('.background-video');
+        this.currentVideoIndex = 0;
+        this.isTransitioning = false;
+        this.intervalTime = 5000; // 5 seconds
+        this.transitionDuration = 1000; // 1 second fade
+        
+        this.init();
+      }
+      
+      init() {
+        // Ensure all videos are loaded and ready
+        this.preloadVideos();
+        
+        // Start the rotation after a short delay
+        setTimeout(() => {
+          this.startRotation();
+        }, 2000);
+        
+        // Add visibility change listener to pause/resume when tab is not active
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            this.pauseAllVideos();
+          } else {
+            this.resumeCurrentVideo();
+          }
+        });
+      }
+      
+      preloadVideos() {
+        this.videos.forEach((video, index) => {
+          video.addEventListener('loadeddata', () => {
+            console.log(`Video ${index + 1} loaded successfully`);
+          });
+          
+          video.addEventListener('error', (e) => {
+            console.warn(`Video ${index + 1} failed to load:`, e);
+          });
+          
+          // Preload the video
+          video.load();
+        });
+      }
+      
+      startRotation() {
+        // Start the interval for changing videos
+        this.rotationInterval = setInterval(() => {
+          this.switchToRandomVideo();
+        }, this.intervalTime);
+        
+        console.log('🎬 Video background rotation started - changing every 5 seconds');
+      }
+      
+      switchToRandomVideo() {
+        if (this.isTransitioning) return;
+        
+        // Get a random video index different from current
+        let newIndex;
+        do {
+          newIndex = Math.floor(Math.random() * this.videos.length);
+        } while (newIndex === this.currentVideoIndex && this.videos.length > 1);
+        
+        this.transitionToVideo(newIndex);
+      }
+      
+      transitionToVideo(newIndex) {
+        if (this.isTransitioning || newIndex === this.currentVideoIndex) return;
+        
+        this.isTransitioning = true;
+        const currentVideo = this.videos[this.currentVideoIndex];
+        const newVideo = this.videos[newIndex];
+        
+        console.log(`🔄 Switching from video ${this.currentVideoIndex + 1} to video ${newIndex + 1}`);
+        
+        // Update indicators
+        this.updateIndicators(newIndex);
+        
+        // Start playing the new video
+        newVideo.currentTime = 0;
+        newVideo.play().catch(e => console.warn('Video play failed:', e));
+        
+        // Fade out current video and fade in new video
+        currentVideo.style.opacity = '0';
+        newVideo.style.opacity = '1';
+        newVideo.classList.add('fade-in');
+        
+        // Update current index
+        this.currentVideoIndex = newIndex;
+        
+        // Show brief indicator
+        this.showIndicator();
+        
+        // Reset transition flag after animation completes
+        setTimeout(() => {
+          this.isTransitioning = false;
+          // Pause the previous video to save resources
+          currentVideo.pause();
+          newVideo.classList.remove('fade-in');
+        }, this.transitionDuration);
+      }
+      
+      updateIndicators(activeIndex) {
+        const dots = document.querySelectorAll('.video-dot');
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === activeIndex);
+        });
+      }
+      
+      showIndicator() {
+        const indicator = document.getElementById('video-indicator');
+        if (indicator) {
+          indicator.classList.add('show');
+          setTimeout(() => {
+            indicator.classList.remove('show');
+          }, 2000);
+        }
+      }
+      
+      pauseAllVideos() {
+        this.videos.forEach(video => video.pause());
+        if (this.rotationInterval) {
+          clearInterval(this.rotationInterval);
+        }
+      }
+      
+      resumeCurrentVideo() {
+        const currentVideo = this.videos[this.currentVideoIndex];
+        currentVideo.play().catch(e => console.warn('Video resume failed:', e));
+        this.startRotation();
+      }
+      
+      // Manual control methods
+      nextVideo() {
+        const nextIndex = (this.currentVideoIndex + 1) % this.videos.length;
+        this.transitionToVideo(nextIndex);
+      }
+      
+      previousVideo() {
+        const prevIndex = (this.currentVideoIndex - 1 + this.videos.length) % this.videos.length;
+        this.transitionToVideo(prevIndex);
+      }
+      
+      setVideo(index) {
+        if (index >= 0 && index < this.videos.length) {
+          this.transitionToVideo(index);
+        }
+      }
+    }
+    
+    // Global functions for video controls
+    let autoRotateEnabled = true;
+    
+    function toggleVideoControls() {
+      autoRotateEnabled = !autoRotateEnabled;
+      const btn = event.target.closest('.video-control-btn');
+      const icon = btn.querySelector('i');
+      
+      if (autoRotateEnabled) {
+        window.videoManager.startRotation();
+        btn.title = 'Auto-rotate: ON';
+        icon.style.animation = 'spin 2s linear infinite';
+      } else {
+        clearInterval(window.videoManager.rotationInterval);
+        btn.title = 'Auto-rotate: OFF';
+        icon.style.animation = 'none';
+      }
+    }
+    
+    // Initialize the video background manager when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      window.videoManager = new VideoBackgroundManager();
+      
+      // Add click handlers for video dots
+      document.querySelectorAll('.video-dot').forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          window.videoManager.setVideo(index);
+        });
+      });
+      
+      // Show controls on hover over video area
+      let controlsTimeout;
+      document.addEventListener('mousemove', (e) => {
+        const controls = document.getElementById('video-controls');
+        if (e.clientY > window.innerHeight - 150) { // Bottom 150px
+          controls.classList.add('show');
+          clearTimeout(controlsTimeout);
+          controlsTimeout = setTimeout(() => {
+            controls.classList.remove('show');
+          }, 3000);
+        }
+      });
+      
+      // Add keyboard shortcuts for manual control
+      document.addEventListener('keydown', (e) => {
+        // Only if Ctrl/Cmd is held (to avoid conflicts with existing shortcuts)
+        if (e.ctrlKey || e.metaKey) {
+          switch(e.key) {
+            case 'ArrowRight':
+              e.preventDefault();
+              window.videoManager.nextVideo();
+              break;
+            case 'ArrowLeft':
+              e.preventDefault();
+              window.videoManager.previousVideo();
+              break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+              e.preventDefault();
+              window.videoManager.setVideo(parseInt(e.key) - 1);
+              break;
+            case 'v':
+              e.preventDefault();
+              toggleVideoControls();
+              break;
+          }
+        }
+      });
+    });
+    
+    // Add spin animation for the rotate button
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 
   <footer>
     <div class="container-fluid my-class foot">
@@ -243,8 +536,28 @@
         </div>
       </div>
     </div>
-    </container>
   </footer>
+
+  <!-- Video Background Indicator (Optional) -->
+  <div class="video-indicator" id="video-indicator">
+    <div class="video-dot active" data-video="0" title="Lofi Video 1"></div>
+    <div class="video-dot" data-video="1" title="Lofi Video 2"></div>
+    <div class="video-dot" data-video="2" title="Lofi Video 3"></div>
+    <div class="video-dot" data-video="3" title="Lofi Video 4"></div>
+  </div>
+
+  <!-- Video Controls (Hidden by default) -->
+  <div class="video-controls" id="video-controls">
+    <button class="video-control-btn" onclick="window.videoManager?.previousVideo()" title="Previous Video (Ctrl+←)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="video-control-btn" onclick="window.videoManager?.nextVideo()" title="Next Video (Ctrl+→)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="video-control-btn" onclick="toggleVideoControls()" title="Auto-rotate: ON">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+  </div>
 
   <div id="confetti"></div>
 

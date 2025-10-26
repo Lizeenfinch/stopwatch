@@ -6,6 +6,10 @@ var remainingTime = 0
 var darkTheme = false
 var totalTime = 0
 
+// Variables for Picture-in-Picture (PiP)
+let pipWindow = null;
+let pipRequestInProgress = false;
+
 const audio = new Audio();
 audio.src = "../audio/sound_trim.mp3";
 
@@ -58,6 +62,7 @@ function stopCelebration() {
 function onTimerComplete() {
     paused = true;
     clearInterval(interval);
+    closePipWindow(); // Close PiP window on complete
     $id('timer-control').innerHTML = '<i class="fas fa-play-circle"></i> Play';
     // Hide focus text when timer completes
     $id('focus').classList.add('hide');
@@ -127,6 +132,7 @@ const setCustomTime = (hours = 0, minutes = 0, seconds = 0) => {
 
 const reset = () => {
     stopAlarm();
+    closePipWindow(); // Close PiP window on reset
     // Hide focus message
     $id('focus').classList.add('hide');
     // Reset button styles
@@ -205,13 +211,32 @@ const startCustomTimerCounter = () => {
             const hours = Math.floor(customTime.seconds / (60 * 60));
             const minutes = Math.floor(customTime.seconds / 60) % 60;
             const seconds = customTime.seconds % 60;
-            $id('hours').innerHTML = String(hours).padStart(2, '0');
-            $id('minutes').innerHTML = String(minutes).padStart(2, '0');
-            $id('seconds').innerHTML = String(seconds).padStart(2, '0');
+            
+            // Capture padded strings
+            const hoursString = String(hours).padStart(2, '0');
+            const minutesString = String(minutes).padStart(2, '0');
+            const secondsString = String(seconds).padStart(2, '0');
+
+            // Update main page display
+            $id('hours').innerHTML = hoursString;
+            $id('minutes').innerHTML = minutesString;
+            $id('seconds').innerHTML = secondsString;
+            
+            // --- ADDED FOR PiP ---
+            // If the PiP window is open, send it the new time
+            if (pipWindow) {
+                pipWindow.postMessage({
+                    hours: hoursString,
+                    minutes: minutesString,
+                    seconds: secondsString
+                });
+            }
+            // --- END PiP ---
+
             updateProgressBar();
             
             // Update document title to show remaining time
-            document.title = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} - Custom Timer`;
+            document.title = `${hoursString}:${minutesString}:${secondsString} - Custom Timer`;
             
             // Check if timer is almost complete to prepare for completion
             if (customTime.seconds <= 3) {
@@ -351,6 +376,61 @@ $(document).ready(function () {
         }
     });
 });
+
+// ============================================
+// PICTURE-IN-PICTURE (PiP) WIDGET FUNCTIONS
+// ============================================
+
+// Tries to open the PiP widget window
+async function openPipWindow() {
+    // Return if a window is already open or a request is in progress
+    if (pipWindow || pipRequestInProgress) {
+        return;
+    }
+    pipRequestInProgress = true;
+    try {
+        // Request a new PiP window
+        pipWindow = await documentPictureInPicture.requestWindow({
+            width: 320,  // Set a good width
+            height: 120, // Set a good height
+            url: 'widget.html' // The new file we created
+        });
+
+        // Add an event listener to know when the user closes it
+        pipWindow.addEventListener("pagehide", (e) => {
+            pipWindow = null;
+        });
+
+    } catch (err) {
+        console.error("PiP Error: ", err);
+    } finally {
+        pipRequestInProgress = false;
+    }
+}
+
+// Closes the PiP window
+function closePipWindow() {
+    if (pipWindow) {
+        pipWindow.close();
+        pipWindow = null;
+    }
+}
+
+// This function runs every time you switch tabs
+function handleVisibilityChange() {
+    // If the tab is hidden AND the timer is running...
+    if (document.hidden && !paused) {
+        openPipWindow(); // ...open the widget
+    } 
+    // If the tab is visible...
+    else {
+        closePipWindow(); // ...close the widget
+    }
+}
+
+// Listen for tab switching
+document.addEventListener("visibilitychange", handleVisibilityChange);
+
 
 // Date display functionality
 setInterval(() => {
